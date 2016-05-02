@@ -3,6 +3,8 @@
 #include <string.h>
 #include "pcb.h"
 
+const char * STATE_NAMES[] = {"Created", "Ready", "Running", "Interrupted", "Waiting", "Halted"};
+
 int id = 0;
 
 // Returns a pcb pointer to heap allocation
@@ -50,26 +52,7 @@ int PCB_set_state(PCB_p pcb, state_t state) {
 char * PCB_toString (PCB_p pcb){
 	char* str_buffer = (char*) calloc(128, sizeof(char));
 	char* state_string = (char*) calloc(16, sizeof(char));
-	switch(pcb->state) {
-		case CREATED:
-			strcpy(state_string, "CREATED");
-			break;
-		case READY:
-			strcpy(state_string, "READY");
-			break;
-		case RUNNING:
-			strcpy(state_string, "RUNNING");
-			break;
-		case INTERRUPTED:
-			strcpy(state_string, "INTERRUPTED");
-			break;
-		case WAITING:
-			strcpy(state_string, "WAITING");
-			break;
-		case HALTED:
-			strcpy(state_string, "HALTED");
-			break;
-	}
+	strcpy(state_string, STATE_NAMES[pcb->state]);
 	sprintf(str_buffer, "PID: 0x%04X, PC: 0x%04X, STATE: %s",
 			(unsigned int) pcb->pid, pcb->pc, state_string);
 

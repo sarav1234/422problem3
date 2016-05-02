@@ -35,7 +35,7 @@ void FIFOq_enqueue(FIFOq_p queue, PCB_p pcb_param){
 
 PCB_p FIFOq_dequeue(FIFOq_p queue){
         PCB_p temp = (PCB_p) queue->head->pcb;
-        
+
         queue->head=queue->head->next;
         queue->size--;
 
@@ -50,7 +50,7 @@ char* FIFOq_tostring(FIFOq_p queue){
         sprintf(result, "Q:Count=%d: ", queue->size);
         Node * n=queue->head;
         while(n!=NULL) {
-          sprintf(temp, "P%d->", n->pcb->pid);
+          sprintf(temp, "P%lu->", n->pcb->pid);
           strcat(pids,temp);
                 n=(Node*)(n->next);
         }

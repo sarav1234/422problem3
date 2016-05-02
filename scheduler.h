@@ -1,7 +1,7 @@
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
 
-//#include "pcb.h"
+#include "pcb.h"
 #include "FIFOq.h"
 
 #define ERROR 0

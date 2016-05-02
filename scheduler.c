@@ -10,10 +10,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
-
-#include "pcb.h"
 #include "scheduler.h"
-#include "FIFOq.h"
 
 #define MAX_LOOPS 6
 
@@ -21,28 +18,7 @@ unsigned int sys_stack;
 unsigned int pc;
 OS_p os;
 
-// implements the round robin algorithm
-// "ready" queue, running queue, interrupted, blocked, terminated
-int main(int argc, char** argv) {
-	srand(0);
 
-	initialize();
-
-	// Loop 6 times
-	for(int i = 0; i < MAX_LOOPS; i++){
-		// Create processes and put them in the created queue
-		int number_pcbs = rand() % 5 + 1;
-		for(int c = 0; c < number_pcbs; c++){
-			PCB_p pcb = PCB_construct();
-			PCB_init(pcb);
-			PCB_set_state(pcb, CREATED); // created state
-			FIFOq_enqueue(os->created_q, pcb);
-		}
-
-		// Main loop for scheduler and dispatcher
-		run_loop();
-	}
-}
 
 int initialize(void) {
 	os = malloc(sizeof(OS));
@@ -172,5 +148,28 @@ void save_state(PCB_p curr_pcb) {
 void deallocate() {
 	while (!FIFOq_is_empty(os->terminated_q)) {
 		PCB_destruct(FIFOq_dequeue(os->terminated_q));
+	}
+}
+
+// implements the round robin algorithm
+// "ready" queue, running queue, interrupted, blocked, terminated
+int main(void) {
+	srand(0);
+
+	initialize();
+
+	// Loop 6 times
+	for(int i = 0; i < MAX_LOOPS; i++){
+		// Create processes and put them in the created queue
+		int number_pcbs = rand() % 5 + 1;
+		for(int c = 0; c < number_pcbs; c++){
+			PCB_p pcb = PCB_construct();
+			PCB_init(pcb);
+			PCB_set_state(pcb, CREATED); // created state
+			FIFOq_enqueue(os->created_q, pcb);
+		}
+
+		// Main loop for scheduler and dispatcher
+		run_loop();
 	}
 }
